@@ -21,6 +21,8 @@ const int   httpsPort           = 443;
 
 const long  wifiConnectTimeout  = 30000;
 const bool  useLedIfFailedConn  = true;
+
+const int   updateInterval      = 60000; // milliseconds
 // --------------------------------------------------------------
 
 // ==============================================================
@@ -188,6 +190,6 @@ void loop() {
   readWeather();
   publishWeather();
 
-  delay(1000);
+  delay(updateInterval);
 }
 // --------------------------------------------------------------
