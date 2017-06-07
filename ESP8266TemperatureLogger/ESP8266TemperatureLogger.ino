@@ -14,6 +14,7 @@ const char* wifiPassword  = "YOUR_WIFI_PSK";
 const char* matrixHomeserver    = "YOUR_HS"; // do not include trailing slash or "https://" parts
 const char* matrixAccessToken   = "YOUR_AT";
 const char* matrixRoomId        = "YOUR_ROOM";
+const char* stationName         = "Home Server Room";
 
 const bool  useHttps            = true;
 const char* certFingerprint     = "YOUR_CERT_FINGERPRINT";
@@ -54,6 +55,7 @@ void createEventBody(char* buffer, int bufferLen, float tempc, float tempf, floa
   root["temp_c"] = tempc;
   root["temp_f"] = tempf;
   root["rel_humidity"] = humidity;
+  root["station_name"] = stationName;
 
   root.printTo(buffer, bufferLen);
 }
@@ -61,9 +63,10 @@ void createEventBody(char* buffer, int bufferLen, float tempc, float tempf, floa
 void doSecurePut(char* data) {
   WiFiClientSecure https;
 
-  if (!https.connect(matrixHomeserver, httpsPort)) {
-    Serial.println("HTTP - Failed to connect");
-    return;
+  int attempts = 0;
+  while (!https.connect(matrixHomeserver, httpsPort)) {
+    Serial.println("HTTP - Failed to connect - retrying");
+    attempts++;
   }
 
   if (https.verify(certFingerprint, matrixHomeserver)) {
@@ -106,11 +109,7 @@ void postMatrixEvent() {
     return;
   }
 
-  String scheme = "http://";
-  if (useHttps) {
-    scheme = "https://";
-  }
-  String url = scheme + String(matrixHomeserver) + "/_matrix/client/r0/rooms/" + String(matrixRoomId) + "/send/io.t2l.matrix.weather/e" + String(millis()) + "?access_token=" + String(matrixAccessToken);
+  String url = "http://" + String(matrixHomeserver) + "/_matrix/client/r0/rooms/" + String(matrixRoomId) + "/send/io.t2l.matrix.weather/e" + String(millis()) + "?access_token=" + String(matrixAccessToken);
   Serial.println("PUT - " + url);
   Serial.println(buffer);
 
