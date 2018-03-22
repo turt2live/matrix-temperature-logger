@@ -1,7 +1,5 @@
 # matrix-temperature-logger
 
-[![Targeted for next release](https://badge.waffle.io/turt2live/matrix-temperature-logger.png?label=sorted&title=Targeted+for+next+release)](https://waffle.io/turt2live/waffle-matrix?utm_source=badge) [![WIP](https://badge.waffle.io/turt2live/matrix-temperature-logger.png?label=wip&title=WIP)](https://waffle.io/turt2live/waffle-matrix?utm_source=badge)
-
 A simple temperature logger using Matrix as a storage mechanism. This requires a valid Matrix ID and a WiFi connection in order to operate.
 
 The ESP8266 used in this project sends events of the type `io.t2l.matrix.weather`. A weather event looks similar to this:
